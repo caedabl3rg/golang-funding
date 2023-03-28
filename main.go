@@ -50,14 +50,17 @@ func main() {
 		
 		
 	userHandler := handler.NewUserHandler(userService)
+	// userService.SaveAvatar(1,"images/profile.png")testing langsung upload ke DB
 
 	router := gin.Default()
 	api := router.Group("api/v1")
 
 	// TESTING LOGIN
+	
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email-checker", userHandler.CheckEmailAvailability)
 	api.POST("/users", userHandler.RegisterUser)
+	api.POST("/avatars", userHandler.UploadAvatar)
 	router.Run()
 
 	// userInput := user.RegisterUserInput{}
