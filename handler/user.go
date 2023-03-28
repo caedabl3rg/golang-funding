@@ -42,6 +42,39 @@ func (h userHandler) RegisterUser(c *gin.Context) {
 
 }
 
+func (h *userHandler) Login(c *gin.Context) {
+	// USER MEMASUKAN INPUT EMAIL DAN PASSWORD
+	// INPUT DITANGKAP HANDLER
+	// MAPPING DARI INPUT USER KE INPUT STRUCT
+	// 2. INPUT STRUCT PASSING SERVICE
+	// 1. DI SERVICE MENCARI DG BANTUAN REPOSITORY USER DENGAN EMAIL X
+	// MENCOCOKAN PASSWORD
+
+	var input user.LoginInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormattError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Login Failed", http.StatusUnprocessableEntity, "errors", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+	loggedUser, err := h.userService.Login(input)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Login Failed", http.StatusUnprocessableEntity, "errors", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+	formatter := user.FormatUser(loggedUser, "tokentokentokentoken")
+	response := helper.APIResponse("Login Success", http.StatusOK, "success", formatter)
+	c.JSON(http.StatusOK, response)
+
+}
+
 func NewUserHandler(userService user.Service) *userHandler {
 	return &userHandler{userService: userService}
 }

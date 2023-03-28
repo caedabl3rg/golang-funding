@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "fmt"
 	"log"
 	"startup/handler"
 	"startup/user"
@@ -20,11 +21,41 @@ func main() {
 	userRepository := user.NewRepositoryUser(db)
 	userService := user.NewService(userRepository)
 
+	// Debug find email 
+	/*userByEmail, err  := userRepository.FindByEmail("addmin@gmail.com")
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		if (userByEmail.ID == 0) {
+			fmt.Println("user tidak ditentukan")
+		} else {
+			fmt.Println(userByEmail.Name)
+		}
+		fmt.Println(userByEmail)*/
+
+	//testing password match compare
+	/*	input := user.LoginInput{
+			Email: "admin@gmail.com",
+			Password: "admine",
+
+		}
+		user, err := userService.Login(input)
+		if err != nil {
+			fmt.Println("terjadi kesalahan")
+			fmt.Println(err.Error())
+		}
+		fmt.Println(user.Email)
+		fmt.Println(user.Name)*/
+		
+		
+		
 	userHandler := handler.NewUserHandler(userService)
 
 	router := gin.Default()
 	api := router.Group("api/v1")
 
+	// TESTING LOGIN
+	api.POST("/sessions", userHandler.Login)
 	api.POST("/users", userHandler.RegisterUser)
 	router.Run()
 
