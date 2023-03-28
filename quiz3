@@ -1,0 +1,22 @@
+SAGA pattern adalah sebuah pola desain (design pattern) 
+yang digunakan dalam arsitektur mikroservis untuk mengelola transaksi 
+yang melibatkan beberapa layanan (services) atau beberapa operasi (operations).
+
+SAGA pattern bertujuan untuk menjaga konsistensi data dan memastikan transaksi 
+yang melibatkan beberapa layanan dapat di-rollback (membatalkan transaksi)
+ secara aman jika ada satu atau beberapa langkah transaksi yang gagal.
+
+Penerapan SAGA pattern biasanya melibatkan beberapa komponen, 
+antara lain: koordinator transaksi (transaction coordinator), layanan-layanan yang terlibat 
+dalam transaksi (participant services), dan log transaksi (transaction log) yang mencatat setiap langkah transaksi yang telah dilakukan.
+
+
+
+gRPC adalah singkatan dari "Google Remote Procedure Call". Ini adalah teknologi 
+open-source untuk membuat koneksi jaringan dan melakukan komunikasi antara aplikasi yang berbeda.
+
+gRPC menggunakan protokol HTTP/2 untuk mentransfer data secara efisien dan cepat, 
+dan mendukung serialisasi data dengan protobuf (Protocol Buffers), 
+yang lebih efisien daripada format serialisasi data lainnya seperti JSON atau XML.
+
+gRPC biasanya digunakan dalam arsitektur mikroservis untuk menghubungkan layanan-layanan yang berbeda, karena memungkinkan komunikasi yang cepat dan efisien antara layanan-layanan tersebut. Selain itu, gRPC juga mendukung banyak bahasa pemrograman, termasuk Java, Python, C++, dan Go, sehingga memungkinkan pengembang untuk membangun aplikasi yang berjalan di berbagai platform dengan mudah.
