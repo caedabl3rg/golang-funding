@@ -2,7 +2,9 @@ package main
 
 import (
 	// "fmt"
+
 	"log"
+	"startup/auth"
 	"startup/handler"
 	"startup/user"
 
@@ -21,17 +23,17 @@ func main() {
 	userRepository := user.NewRepositoryUser(db)
 	userService := user.NewService(userRepository)
 
-	// Debug find email 
+	// Debug find email
 	/*userByEmail, err  := userRepository.FindByEmail("addmin@gmail.com")
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		if (userByEmail.ID == 0) {
-			fmt.Println("user tidak ditentukan")
-		} else {
-			fmt.Println(userByEmail.Name)
-		}
-		fmt.Println(userByEmail)*/
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if (userByEmail.ID == 0) {
+		fmt.Println("user tidak ditentukan")
+	} else {
+		fmt.Println(userByEmail.Name)
+	}
+	fmt.Println(userByEmail)*/
 
 	//testing password match compare
 	/*	input := user.LoginInput{
@@ -46,17 +48,16 @@ func main() {
 		}
 		fmt.Println(user.Email)
 		fmt.Println(user.Name)*/
-		
-		
-		
-	userHandler := handler.NewUserHandler(userService)
+
+	authService := auth.NewService()
+	userHandler := handler.NewUserHandler(userService, authService)
 	// userService.SaveAvatar(1,"images/profile.png")testing langsung upload ke DB
 
 	router := gin.Default()
 	api := router.Group("api/v1")
 
 	// TESTING LOGIN
-	
+
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email-checker", userHandler.CheckEmailAvailability)
 	api.POST("/users", userHandler.RegisterUser)
