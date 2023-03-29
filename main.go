@@ -3,6 +3,7 @@ package main
 import (
 	// "fmt"
 
+	"fmt"
 	"log"
 	"startup/auth"
 	"startup/handler"
@@ -52,7 +53,20 @@ func main() {
 	authService := auth.NewService()
 	userHandler := handler.NewUserHandler(userService, authService)
 	// userService.SaveAvatar(1,"images/profile.png")testing langsung upload ke DB
-
+	
+	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2fQ.spLHRa9t4bBQ74eF8vYtWF-x8vc98NKXeWY-gwkdzJM")
+		if err != nil {
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+			fmt.Println("ERROR")
+		}
+		if token.Valid {
+			fmt.Println("VALID")
+			fmt.Println("VALID")
+		} else {
+			fmt.Println("NOT VALID")
+			fmt.Println("NOT VALID")
+		}
 	router := gin.Default()
 	api := router.Group("api/v1")
 
