@@ -11,11 +11,24 @@ type Service interface {
 	Login(input LoginInput) (User, error)
 	IsEmailAvailable(input CheckEmailInput) (bool, error)
 	SaveAvatar(ID int, fileLocation string) (User, error)
+	GetUserByID(ID int) (User, error)
 }
 
 type service struct {
 	repository Repository
 }
+
+func (s *service) GetUserByID(ID int) (User, error) {
+	user, err := s.repository.FindById(ID)
+	if err != nil {
+		return user, err
+	}
+	if user.ID == 0 {
+		return user, errors.New("No user found on with that ID")
+	}
+	return user, nil
+}
+
 func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
 	//DAPATKAN USER BERDASARKAN ID
 	// UPDATE ATTRIBUTE AVATAR FILE NAME /NILAI BARU BELUM DISAVE
@@ -25,7 +38,7 @@ func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
 		return user, err
 	}
 	user.AvatarFileName = fileLocation
-	
+
 	updatedUser, err := s.repository.Update(user)
 	if err != nil {
 		return updatedUser, err
