@@ -23,25 +23,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
+	// REPOSITORY
 	userRepository := user.NewRepositoryUser(db)
-	userService := user.NewService(userRepository)
 	campaignRepository := campaign.NewRepositoryCampaign(db)
 
-	campaigns, err := campaignRepository.FindALl()
-	fmt.Println("============")
+	// SERVICE 
+	userService := user.NewService(userRepository)
+	campaignService := campaign.NewServiceCampaign(campaignRepository)
+
+	campaigns, _ := campaignService.FindCampaigns(0)
 	fmt.Println(len(campaigns))
-	fmt.Println("===============")
-
-	for _, c := range campaigns {
-		fmt.Println(c.Name)
-		if len(c.CampaignImages) > 0 {
-			fmt.Println("=========== jumlah gambar")
-			fmt.Println(c.CampaignImages[0].FileName)
-			fmt.Println("=========== jumlah gambar")
-
-		}
-	}  
 
 	authService := auth.NewService()
 	userHandler := handler.NewUserHandler(userService, authService)
