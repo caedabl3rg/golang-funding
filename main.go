@@ -1,12 +1,11 @@
 package main
 
 import (
-	// "fmt"
-
 	"fmt"
 	"log"
 	"net/http"
 	"startup/auth"
+	"startup/campaign"
 	"startup/handler"
 	"startup/helper"
 	"startup/user"
@@ -27,50 +26,25 @@ func main() {
 
 	userRepository := user.NewRepositoryUser(db)
 	userService := user.NewService(userRepository)
+	campaignRepository := campaign.NewRepositoryCampaign(db)
 
-	// Debug find email
-	/*userByEmail, err  := userRepository.FindByEmail("addmin@gmail.com")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	if (userByEmail.ID == 0) {
-		fmt.Println("user tidak ditentukan")
-	} else {
-		fmt.Println(userByEmail.Name)
-	}
-	fmt.Println(userByEmail)*/
+	campaigns, err := campaignRepository.FindALl()
+	fmt.Println("============")
+	fmt.Println(len(campaigns))
+	fmt.Println("===============")
 
-	//testing password match compare
-	/*	input := user.LoginInput{
-			Email: "admin@gmail.com",
-			Password: "admine",
+	for _, c := range campaigns {
+		fmt.Println(c.Name)
+		if len(c.CampaignImages) > 0 {
+			fmt.Println("=========== jumlah gambar")
+			fmt.Println(c.CampaignImages[0].FileName)
+			fmt.Println("=========== jumlah gambar")
 
 		}
-		user, err := userService.Login(input)
-		if err != nil {
-			fmt.Println("terjadi kesalahan")
-			fmt.Println(err.Error())
-		}
-		fmt.Println(user.Email)
-		fmt.Println(user.Name)*/
+	}  
 
 	authService := auth.NewService()
 	userHandler := handler.NewUserHandler(userService, authService)
-	// userService.SaveAvatar(1,"images/profile.png")testing langsung upload ke DB
-
-	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2fQ.spLHRa9t4bBQ74eF8vYtWF-x8vc98NKXeWY-gwkdzJM")
-	if err != nil {
-		fmt.Println("ERROR")
-		fmt.Println("ERROR")
-		fmt.Println("ERROR")
-	}
-	if token.Valid {
-		fmt.Println("VALID")
-		fmt.Println("VALID")
-	} else {
-		fmt.Println("NOT VALID")
-		fmt.Println("NOT VALID")
-	}
 
 	router := gin.Default()
 	api := router.Group("api/v1")
@@ -118,7 +92,7 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
 		}
-		
+
 		c.Set("currentUser", user)
 	}
 }
